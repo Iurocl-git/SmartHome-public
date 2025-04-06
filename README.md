@@ -67,3 +67,39 @@ The interface design emphasizes cleanliness, intuitiveness, and consistency. It 
 *   **Modern Stack:** Leveraging current technologies like Expo, TypeScript, NativeWind v4, Zustand, and WebRTC.
 ---
 **(Screenshots showcasing various application screens are provided alongside this description.)**
+
+<div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">
+
+  <img src="smarthome/welcome-1.jpeg" alt="Welcome screen 1" width="300">
+  <img src="smarthome/welcome-2.jpeg" alt="Welcome screen 2" width="300">
+
+  <img src="smarthome/%20login.jpeg" alt="Login" width="300">
+  <img src="smarthome/register.jpeg" alt="Register" width="300">
+
+  <img src="smarthome/%20houses.jpeg" alt="Houses" width="300">
+  <img src="smarthome/house.jpeg" alt="House" width="300">
+
+  <img src="smarthome/room-1.jpeg" alt="Room 1" width="300">
+  <img src="smarthome/room-2.jpeg" alt="Room 2" width="300">
+
+  <img src="smarthome/room-3.jpeg" alt="Room 3" width="300">
+  <img src="smarthome/rooms-comparison.jpeg" alt="Rooms comparison" width="300">
+
+  <img src="smarthome/rooms-comparison-black.jpeg" alt="Rooms comparison dark" width="300">
+  <img src="smarthome/device-white.jpeg" alt="Device white" width="300">
+
+  <img src="smarthome/device-black.jpeg" alt="Device dark" width="300">
+  <img src="smarthome/profile.jpeg" alt="Profile" width="300">
+
+  <img src="smarthome/notification.jpeg" alt="Notification" width="300">
+  <img src="smarthome/camera-stream-old-design.jpeg" alt="Camera stream old design" width="300">
+
+</div>
+
+
+
+
+
+
+
+
