@@ -1,72 +1,67 @@
-# Project: Smart Home Mobile Application
+# 🏠 Project: Smart Home "Local-First" Ecosystem
 
 **Author:** Ioan Motrescu
+**Type:** Bachelor's Thesis Project (Licență)
+**Status:** In Development (Core architecture & Security logic implemented)
 
-**Status:** In Development (Core functionality implemented, UI/UX refinement ongoing)
+## 📖 Overview
 
-## Overview
+This project represents a robust, **Local-First Smart Home platform** designed to bridge the gap between commercial solutions (easy to use but cloud-dependent) and enthusiast open-source systems (secure but complex).
 
-This is a mobile application designed for convenient control and monitoring of smart home devices. The project aims to provide users with a single, intuitive interface to interact with various smart devices, including lighting, climate control, security sensors, and integrated IP video cameras using the ONVIF standard. The application is built using modern technologies with a focus on a comfortable and seamless user experience.
+The primary goal is to provide a fully offline-capable ecosystem that runs on a user's local network, ensuring **zero-latency control**, **data privacy**, and—most importantly—an **advanced, granular permission system** tailored for multi-generational families. It solves the common problem: *"How do I let my child control their room's light without giving them access to the central heating configuration?"*
 
-## Key Features
+## 🚀 Key Features
 
-*   **Device Control:**
-    *   Toggle device power states (lights, switches, etc.).
-    *   Adjust device modes (e.g., "eco", "turbo", "normal" for climate devices).
-    *   Set specific parameters (e.g., target temperature for thermostats).
-*   **Sensor Monitoring:**
-    *   Real-time display of data from various sensors (temperature, humidity, motion, smoke, gas, CO2, air quality, light, window/door status, etc.).
-    *   Comparison of sensor data between different rooms over a selected time period.
-*   **Video Surveillance (ONVIF/WebRTC):**
-    *   **ONVIF Camera Integration:** Connects to ONVIF-compliant IP cameras on the local network.
-    *   **Live Video Streaming:** Displays real-time video feeds within the app using WebRTC. Video streams (e.g., RTSP) from cameras are processed by a dedicated **`deepch/rtsptoweb` Docker container**, transforming them into WebRTC for efficient mobile viewing.
-    *   **Basic Camera Commands:** Sends simple ONVIF commands to cameras (e.g., potential for basic PTZ controls if supported by the camera).
-*   **Notifications:**
-    *   Integrated push notification system using **Expo Push Notifications** and **Firebase Cloud Messaging (FCM)**.
-    *   Alerts for critical events like motion detection, smoke/gas alerts, sensor thresholds, device status changes, etc.
-*   **Home Structure:**
-    *   Support for managing multiple distinct "Homes".
-    *   Device organization by rooms ("Locations") within each home.
-    *   Easy navigation between homes and rooms.
-*   **User Features:**
-    *   Secure user authentication (Login/Registration).
-    *   User profile management (username, email, avatar).
-    *   "Favorite Devices" section for quick access.
+### 1. Granular Security & Permissions (RBAC)
+Unlike typical "Admin vs. User" apps, this system implements a hierarchical permission matrix:
+*   **Hierarchy:** Permissions cascade from **House** → **Room** → **Device**.
+*   **Granular Exceptions:** An Admin can grant a user access to a specific Room, but strictly **block** a critical device within it.
+*   **Roles:** Distinct capabilities for `Admin` (Manage Structure), `Control` (Operate Devices), and `View` (Read-only monitoring).
 
-## Technology Stack
+### 2. Local-First & Cloud Independence
+*   **Offline Operation:** The entire logic resides on a local Node.js server. The house remains smart even when the internet connection is down.
+*   **Data Privacy:** Sensor history and usage patterns are stored locally in PostgreSQL, not on third-party servers.
 
-*   **Client (Mobile App):**
-    *   **Framework:** React Native (Expo Managed Workflow)
+### 3. IoT Auto-Discovery & Onboarding
+*   **MQTT Standard:** Implements the **Home Assistant MQTT Discovery** protocol.
+*   **Plug & Play:** New devices (ESP32, Tasmota, etc.) are automatically detected by the server and placed in an "Inbox" (Unassigned) area, waiting for the Admin to assign them to a room.
+
+### 4. Intelligent Notification Engine
+*   **Event-Driven:** A dedicated backend engine monitors sensor streams in real-time.
+*   **Safety First:** Automatic rule generation for critical devices (Smoke, Gas, Flood).
+*   **Anti-Spam:** Implemented "Cooldown" logic to prevent notification flooding during persistent alarm states.
+
+### 5. Advanced Video Surveillance
+*   **ONVIF Integration:** Compatible with standard IP Cameras.
+*   **Low Latency Streaming:** Uses a Dockerized microservice (`RTSPtoWebRTC`) to convert camera streams into WebRTC for instant playback on mobile devices.
+
+## 🛠️ Technology Stack
+
+The project utilizes a modern, type-safe stack organized in a modular monolith architecture.
+
+*   **Mobile Client:**
+    *   **Framework:** React Native (Expo SDK)
     *   **Language:** TypeScript
-    *   **Styling:** NativeWind v4 (Tailwind CSS for React Native)
-    *   **Navigation:** Expo Router
-    *   **State Management:** Zustand
-    *   **Video:** `react-native-webrtc`
-    *   **Notifications:** `expo-notifications`, FCM
-*   **Backend:**
-    *   **Platform:** Node.js
-    *   **Framework:** Express.js
-    *   **Language:** TypeScript
-    *   **Database:** PostgreSQL
-    *   **Session Management:** `express-session`
-*   **Video Transformation Server:**
-    *   **Software:** `deepch/rtsptoweb`
-    *   **Deployment:** Docker Container
-    *   **Protocols:** ONVIF/RTSP (Input) -> WebRTC (Output)
+    *   **UI/UX:** NativeWind (Tailwind CSS), Custom Design System
+    *   **State:** Zustand (for optimistic UI updates)
+*   **Local Server (The Brain):**
+    *   **Runtime:** Node.js
+    *   **API:** Express.js (REST)
+    *   **Database:** PostgreSQL (using JSONB for flexible sensor data)
+    *   **Communication:** MQTT (Eclipse Mosquitto Broker) via TLS
+    *   **Security:** Session-based Authentication (HTTP-Only Cookies), Bcrypt hashing
+*   **Infrastructure:**
+    *   **Docker:** Containerization of the Database, MQTT Broker, and Video Streaming Service.
 
-## Design & UX
+## 📱 User Experience (UX)
 
-The interface design emphasizes cleanliness, intuitiveness, and consistency. It utilizes a custom design system built with NativeWind v4, featuring a defined color palette (supporting light and dark modes), the **Inter** typeface, and unified styles for components (buttons, cards, input fields, etc.).
+The mobile interface is designed to be "Context-Aware." The application adapts its layout based on the logged-in user's role:
+*   **Admins** see configuration buttons (Edit, Delete, Invite User).
+*   **Regular Users** see control interfaces (Switches, Sliders).
+*   **Restricted Users (View-Only)** see the device status, but interaction elements are visually disabled to indicate lack of permission.
 
-*(Note: Accompanying screenshots showcase the current user interface across various application screens, including login, home/room selection, device control, video streaming, and profile.)*
+## 📸 Interface Gallery
 
-## Key Aspects & Challenges
-
-*   **ONVIF & WebRTC Integration:** Implementing reliable live video streaming from diverse IP cameras via the `deepch/rtsptoweb` transformation server was a key technical focus.
-*   **Device Capability Handling:** Designing the system to flexibly handle various device types and their specific capabilities (`capabilities` data structure).
-*   **Modern Stack:** Leveraging current technologies like Expo, TypeScript, NativeWind v4, Zustand, and WebRTC.
----
-**(Screenshots showcasing various application screens are provided alongside this description.)**
 
 <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">
 
